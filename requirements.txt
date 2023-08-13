@@ -1,0 +1,17 @@
+The package requirements for this Python program are as follows:
+
+- requests
+- bs4 (BeautifulSoup)
+- nltk
+- transformers
+- pandas
+- sklearn
+- yfinance
+- numpy
+- matplotlib
+
+You can install these packages using the following command:
+
+```
+pip install requests bs4 nltk transformers pandas scikit-learn yfinance numpy matplotlib
+```
