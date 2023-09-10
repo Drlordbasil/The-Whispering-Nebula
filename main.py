@@ -28,7 +28,8 @@ class WebContentAggregator:
             response = requests.get(url, headers=headers)
             soup = BeautifulSoup(response.text, "html.parser")
             search_results = soup.find_all("a")
-            self.search_results = [result.get("href") for result in search_results]
+            self.search_results = [result.get("href")
+                                   for result in search_results]
         except requests.exceptions.RequestException as e:
             print(f"Error in dynamic search query: {e}")
 
@@ -48,7 +49,8 @@ class WebContentAggregator:
 class SentimentAnalyzer:
     def __init__(self):
         self.sia = SentimentIntensityAnalyzer()
-        self.nlp_pipeline = pipeline("text-classification", model="textattack/roberta-base-imdb")
+        self.nlp_pipeline = pipeline(
+            "text-classification", model="textattack/roberta-base-imdb")
 
     def analyze_sentiment(self, text):
         sentiment_scores = self.sia.polarity_scores(text)
@@ -65,7 +67,8 @@ class SentimentAnalyzer:
 class ContentCategorization:
     def __init__(self):
         self.model = MultinomialNB()
-        self.pipeline = Pipeline([("vectorizer", CountVectorizer()), ("model", self.model)])
+        self.pipeline = Pipeline(
+            [("vectorizer", CountVectorizer()), ("model", self.model)])
 
     def train_model(self, texts, categories):
         self.pipeline.fit(texts, categories)
@@ -95,7 +98,8 @@ class StockPrediction:
     def split_data(self, data):
         X = data.drop(['Profit'], axis=1)
         y = data['Profit']
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.2, random_state=42)
         return X_train, X_test, y_train, y_test
 
     def train_model(self, X_train, y_train):
@@ -137,7 +141,8 @@ class Portfolio:
     def sell(self, stock, quantity):
         if stock in self.stocks and quantity <= self.stocks[stock]:
             try:
-                price = yf.Ticker(stock).history(period="1d")["Close"].values[-1]
+                price = yf.Ticker(stock).history(
+                    period="1d")["Close"].values[-1]
                 revenue = price * quantity
                 self.capital += revenue
                 self.stocks[stock] -= quantity
@@ -151,7 +156,8 @@ class Portfolio:
             total_investment = self.capital
             current_value = self.capital
             for stock, quantity in self.stocks.items():
-                price = yf.Ticker(stock).history(period="1d")["Close"].values[-1]
+                price = yf.Ticker(stock).history(
+                    period="1d")["Close"].values[-1]
                 current_value += (price * quantity)
             performance = (current_value - total_investment) / total_investment
             return performance
@@ -210,7 +216,8 @@ if __name__ == "__main__":
     categorization = ContentCategorization()
     categories = ['technology', 'finance', 'health']
     categorization.train_model(scraped_data, categories)
-    categorized_texts = [categorization.predict_category(text) for text in scraped_data]
+    categorized_texts = [categorization.predict_category(
+        text) for text in scraped_data]
 
     # Stock Prediction
     prediction = StockPrediction()
